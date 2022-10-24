@@ -13,6 +13,8 @@ from .models import Order, OrderItem
 def checkout(request):
     if request.method == 'POST':
         form = OrderItemForm(data=request.POST)
+
+    pass
     # if serializer.is_valid():
     #     stripe.api_key = settings.STRIPE_SECRET_KEY
     #     paid_amount = sum(
