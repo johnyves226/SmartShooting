@@ -3,15 +3,44 @@
 {% load widget_tweaks %}
  {% block content %}
 {% load crispy_forms_tags %}
+    {% block css %}
+         <link rel="stylesheet"  type="text/css" href="{% static "/style/style.css" %}">
+         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
-      <div class="container">
-        <h2 class="my-4">Creat New Event</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-                {{form|crispy}}
-                <button type="reset" class="btn btn-secondary my-4">Reset</button>
-                <button class="btn btn-primary my-4" type="submit">Submit</button>
-        </form>
-      </div>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    {% endblock %}
+
+      <section class="h-100 h-custom" style="background-color: #383d41; width: 100%">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-8 col-xl-6">
+              <div class="card rounded-3">
+                <img src="{% static "/img/cevent.jpg" %}"
+                  class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                  alt="Sample photo">
+                <div class="card-body p-4 p-md-5">
+                  <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Create New Event</h3>
+                  <form class="px-md-2"  method="post" enctype="multipart/form-data">
+                    <div class="form-outline mb-4">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                    </div>
+                    <button type="reset" class="btn btn-secondary btn-lg mb-1">Reset</button>
+                    <button type="submit" class="btn btn-success btn-lg mb-1">Submit</button>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
 {% endblock content %}

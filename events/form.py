@@ -1,7 +1,6 @@
-from datetime import datetime
 from django import forms
-from django.db import transaction
-from user.models import User,Photographer,Viewer
+from django.forms import TextInput, CheckboxInput
+
 from .models import Event
 
 
@@ -10,7 +9,23 @@ class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['name','description','is_active','author']
-        widgets = {'author': forms.HiddenInput()}
+        widgets = {'author': forms.HiddenInput(),
+                   'name': TextInput(attrs={
+                       'class': "form-control form-control-lg",
+                       'style': 'max-width: 300px;',
+                       'placeholder': 'Name'
+                   }),
+                   'description': TextInput(attrs={
+                       'class': "form-control form-control-lg",
+                       'placeholder': "Description de l'evenement"
+                   }),
+
+                   'is_active': CheckboxInput(attrs={
+                       'class': "form-check-input me-2",
+                   }),
+
+
+                   }
         labels = {
             'name': 'Event Name',
             'description': 'Event Description',
