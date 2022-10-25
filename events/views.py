@@ -1,3 +1,4 @@
+import qrcode
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -8,6 +9,9 @@ from django.db.models import Q
 from events.form import EventCreateForm, ImageForm
 from events.models import Event, Image
 from user.models import Photographer
+from io import BytesIO
+from PIL import Image as im,ImageDraw
+from django.core.files import File
 
 
 @login_required
@@ -18,6 +22,17 @@ def CreateEvent(request):
           form = EventCreateForm(request.POST, request.FILES)
           if form.is_valid():
                event=form.save()
+               event.link="https://smartshooting.herokuapp.com/event/"+str(event.id)+"/images/"
+               qrcode_img = qrcode.make(event.link)
+               canvas = im.new('RGB', (400,400), 'white')
+               draw = ImageDraw.Draw(canvas)
+               canvas.paste(qrcode_img)
+               fname = f'qr_code-{event.name}' + '.png'
+               buffer = BytesIO()
+               canvas.save(buffer, 'PNG')
+               event.qrcode.save(fname, File(buffer), save=False)
+               canvas.close()
+               event.save()
                messages.success(request, ('Your event was successfully create!'))
                return redirect('event_detail',pk=event.pk)
           else:

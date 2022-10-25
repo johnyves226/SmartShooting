@@ -41,6 +41,7 @@ class Event(models.Model):
     is_active = models.BooleanField(default=False)
     slug = models.SlugField(null=True,unique_for_date='published')
     tags = models.ManyToManyField(Tag)
+    link=models.CharField(max_length=300, null=True);
 
     class Meta:
         ordering = ['-last_modified']
@@ -52,17 +53,17 @@ class Event(models.Model):
         return self.name
 
 
-    def save(self,*args,**kwargs):
-        qrcode_img = qrcode.make(self.name)
-        canvas= im.new('RGB',(290,290),'white')
-        draw = ImageDraw.Draw(canvas)
-        canvas.paste(qrcode_img)
-        fname=f'qr_code-{self.name}'+'.png'
-        buffer = BytesIO()
-        canvas.save(buffer,'PNG')
-        self.qrcode.save(fname,File(buffer),save=False)
-        canvas.close()
-        super().save(*args,**kwargs)
+    # def save(self,*args,**kwargs):
+    #     qrcode_img = qrcode.make(self.name)
+    #     canvas= im.new('RGB',(290,290),'white')
+    #     draw = ImageDraw.Draw(canvas)
+    #     canvas.paste(qrcode_img)
+    #     fname=f'qr_code-{self.name}'+'.png'
+    #     buffer = BytesIO()
+    #     canvas.save(buffer,'PNG')
+    #     self.qrcode.save(fname,File(buffer),save=False)
+    #     canvas.close()
+    #     super().save(*args,**kwargs)
 
 def get_image_filename(names,instance=None):
     if instance:
