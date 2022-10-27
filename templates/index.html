@@ -56,11 +56,13 @@
         <hr class="featurette-divider">
 
         {% if user.is_authenticated%}
+            {% if user.is_photographer%}
             <div class="jumbotron">
             <h1 class="display-3">CREER UN EVENEMENT</h1>
 
         <p><a class="btn btn-lg btn-success" href="{% url 'create_event' %}" role="button">Creer un evement</a></p>
       </div>
+             {% endif %}
         {% endif %}
 
 

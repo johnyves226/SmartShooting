@@ -1,6 +1,7 @@
 import qrcode
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView
 from django.template import loader
@@ -52,7 +53,7 @@ def index():
      pass
 
 
-@login_required
+
 class SearchPhotographer(ListView):
     model = Photographer
     template_name = "../templates/result.html"
@@ -65,41 +66,56 @@ class SearchPhotographer(ListView):
         ).distinct()
         return queryset
 
-@login_required
 def showImage(request,pke, pk):
-    template = loader.get_template('../templates/showImage.html')
-    event = Event.objects.get(pk=pke)
-    image=Image.objects.get(pk=pk)
-    context = {'event': event,'image':image}
-    return HttpResponse(template.render(context, request))
+    if request.user.is_authenticated:
+        template = loader.get_template('../templates/showImage.html')
+        event = Event.objects.get(pk=pke)
+        image=Image.objects.get(pk=pk)
+        context = {'event': event,'image':image}
+        return HttpResponse(template.render(context, request))
+    else:
+        return render(request, '../templates/login.html', context={'form': AuthenticationForm()})
 
-@login_required
+
 def EventEdit(request, pk):
-     pass
+    if request.user.is_authenticated:
+        pass
+
+    else:
+        return render(request, '../templates/login.html',context={'form':AuthenticationForm()})
 
 
-@login_required
+
+
 def GetEvent(request,pk):
-      template = loader.get_template('../templates/event_details.html')
-      event = Event.objects.get(pk=pk)
-      context = {'event':event}
-      return HttpResponse(template.render(context, request))
+    if request.user.is_authenticated:
+        template = loader.get_template('../templates/event_details.html')
+        event = Event.objects.get(pk=pk)
+        context = {'event':event}
+        return HttpResponse(template.render(context, request))
+    else:
+        return render(request, '../templates/login.html',context={'form':AuthenticationForm()})
 
 
-@login_required
 def GetEventImage(request,pk):
-    template = loader.get_template('../templates/events_images_view.html')
-    event = Event.objects.get(pk=pk)
-    images=Image.objects.filter(event=event)
-    context = {'event':event,'images':images}
-    return HttpResponse(template.render(context, request))
+    if request.user.is_authenticated:
+        template = loader.get_template('../templates/events_images_view.html')
+        event = Event.objects.get(pk=pk)
+        images=Image.objects.filter(event=event)
+        context = {'event':event,'images':images}
+        return HttpResponse(template.render(context, request))
+    else:
+        return render(request, '../templates/login.html',context={'form':AuthenticationForm()})
 
-@login_required
+
 def GetAllEvent(request):
-    template = loader.get_template('../templates/events_view.html')
-    events = Event.objects.filter(author=request.user)
-    context = {'event':events}
-    return HttpResponse(template.render(context, request))
+    if request.user.is_authenticated:
+        template = loader.get_template('../templates/events_view.html')
+        events = Event.objects.filter(author=request.user)
+        context = {'event':events}
+        return HttpResponse(template.render(context, request))
+    else:
+        return render(request, '../templates/login.html',context={'form':AuthenticationForm()})
 
 
 
